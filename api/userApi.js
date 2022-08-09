@@ -37,6 +37,29 @@ router.post('/addCourse', (req, res) => {
     })
 });
 
+router.post('/blacklist',(req,res)=>{
+    var params = req.body;
+    console.log(params);
+    conn.query('insert into blacklist(u_id,u_name,c_id,time) values (?,?,?,?)',
+    [params.u_id,params.u_name,params.c_id,params.time],function(err,result){
+        if(err){
+            console.log(err);
+        }
+        if(result){
+            jsonWrite(res,result);
+        }
+    })
+})
+router.get('/blacklist',(req,res)=>{
+    conn.query('select * from  blacklist',function(err,row){
+        if(err){
+             console.log(err)            
+        }
+        console.log(typeof row)
+        let data = JSON.stringify(row)
+        res.end(data)
+    })
+});
 router.get('/course',(req,res)=>{
     conn.query('select * from  classes',function(err,row){
         if(err){
